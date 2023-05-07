@@ -9,7 +9,7 @@ trainset = Moisesdb23('/root/dataset/moisesdb23_labelnoise_v1.0_16k_stereo/', se
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,shuffle=True, num_workers=8)
 
 
-model = getattr(Model, 'Conv128')()
+model = getattr(Model, 'Conv128Spec')()
 print(f"{model=}")
 
 trainer = pl.Trainer(max_epochs=1000, gpus=[1])
