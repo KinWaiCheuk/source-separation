@@ -45,8 +45,16 @@ class Conv128SuperRes(pl.LightningModule):
         label = batch[1] # (batch, 4, 2, len)
         
         loss_wav = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
-
+        self.log("Train/mse_wav", loss_wav)
         return loss_wav
+    
+    def validation_step(self, batch, batch_idx):
+        pred = self(batch[0]) # (batch, 8, len)
+        label = batch[1] # (batch, 4, 2, len)
+        
+        loss_wav = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
+        self.log("Val/mse_wav", loss_wav)
+        return loss_wav    
 
         
 

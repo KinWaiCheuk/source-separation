@@ -3,7 +3,7 @@ user_config: # path to config file to update
 gpus: 1
 epochs: 1000
 data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo/'
-model_name: 'Conv128Spec'
+model_name: 'Conv128SuperRes'
 
 dataset:
     train:
@@ -20,4 +20,4 @@ dataloader:
 trainer:
     gpus: ${gpus}
     max_epochs: ${epochs}
-    check_val_every_n_epoch: 0
+    check_val_every_n_epoch: 30
