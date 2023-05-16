@@ -6,7 +6,7 @@ import torchaudio
 import torchaudio.functional as F
 
 class Conv128SuperRes(pl.LightningModule):
-    def __init__(self):
+    def __init__(self, in_sr, super_sr):
         super().__init__()
         
         self.conv1u = nn.Conv1d(2, 16, 11, padding=5)
@@ -21,7 +21,7 @@ class Conv128SuperRes(pl.LightningModule):
 
     def forward(self, x):
         # x (batch , 1, 2, len)
-        x = F.resample(x, 16000, 44100)
+        x = F.resample(x, in_sr, super_sr)
         x = x.flatten(1,2)
         
         x = self.conv1u(x)
@@ -35,7 +35,7 @@ class Conv128SuperRes(pl.LightningModule):
         x = self.conv1d(x)
         
         
-        x = F.resample(x, 44100, 16000)
+        x = F.resample(x, in_sr, super_sr)
         
         return x # (batch, 8, len)
 

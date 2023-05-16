@@ -24,8 +24,9 @@ def my_app(cfg):
                                           filename=f"{cfg.model_name}-" + "{epoch:02d}",
                                           save_top_k=2,
                                           mode="min",
-                                          auto_insert_metric_name=False)
-    name = f"{cfg.model_name}"
+                                          auto_insert_metric_name=False,
+                                          save_last=True)
+    name = f"{cfg.model_name}-{cfg.sr}"
     logger = TensorBoardLogger(save_dir=".", version=1, name=name)      
     trainer = pl.Trainer(**cfg.trainer,
                          callbacks=[checkpoint_callback,],

@@ -2,13 +2,15 @@ user_config: # path to config file to update
 
 gpus: 1
 epochs: 1000
-data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo/'
+sr: 8000
+data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_8k_stereo/'
 model_name: 'Conv128SuperRes'
 
 dataset:
     train:
         root: ${data_root} 
         segment: 10
+        samplerate: ${sr}
         
 dataloader:
     train:
