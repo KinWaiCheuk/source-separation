@@ -10,7 +10,7 @@ from hydra.utils import to_absolute_path
 import os
 
 
-@hydra.main(config_path="config", config_name="exp")
+@hydra.main(config_path="config", config_name="exp", version_base=None)
 def my_app(cfg):
     cfg.data_root = to_absolute_path(cfg.data_root)
     trainset = Moisesdb23(**cfg.dataset.train)
