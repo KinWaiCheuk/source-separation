@@ -3,6 +3,17 @@ import torch.nn as nn
 import pytorch_lightning as pl
 import torch.optim as optim
 
+def calculate_sdr(ref, est):
+    assert ref.dim()==est.dim(), f"ref {ref.shape} has a different size than est {est.shape}"
+    
+    s_true = ref
+    s_artif = est - ref
+
+    sdr = 10. * (
+        torch.log10(torch.clip(torch.mean(s_true ** 2, 1), 1e-8, torch.inf)) \
+        - torch.log10(torch.clip(torch.mean(s_artif ** 2, 1), 1e-8, torch.inf)))
+    return sdr
+
 class Conv128(pl.LightningModule):
     def __init__(self):
         super().__init__()
@@ -38,6 +49,14 @@ class Conv128(pl.LightningModule):
         label = batch[1] # (batch, 4, 2, len)
         loss = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
         return loss
+
+    def test_step(self, batch, batch_idx):
+        pred = self(batch[0]) # (batch, 8, len)
+        label = batch[1] # (batch, 4, 2, len)
+        loss = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
+
+        self.log('Test/mse_loss', recon_loss)
+        return loss        
 
         
 

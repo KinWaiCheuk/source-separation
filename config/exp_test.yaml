@@ -1,0 +1,26 @@
+user_config: # path to config file to update
+
+devices: 1
+epochs: 1000
+sr: 16000
+data_root: '../dataset/mini_moise'
+model_name: 'Conv128'
+checkpoint_path: './outputs/2023-05-11/13-51-26/Conv128SuperRes/version_1/checkpoints/cfg.model_name-989.ckpt'
+
+dataset:
+    train:
+        root: ${data_root} 
+        segment: 10
+        samplerate: ${sr}
+        
+dataloader:
+    train:
+        batch_size: 16
+        num_workers: 8
+        shuffle: True
+        pin_memory: True
+
+trainer:
+    devices: ${devices}
+    max_epochs: ${epochs}
+    check_val_every_n_epoch: 30
