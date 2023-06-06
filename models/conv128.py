@@ -52,6 +52,17 @@ class Conv128(pl.LightningModule):
         pred = self(batch[0]) # (batch, 8, len)
         label = batch[1] # (batch, 4, 2, len)
         loss = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
+        sdr = calculate_sdr(label.flatten(1,2), pred)
+        sdr1, sdr2, sdr3, sdr4 = \
+            torch.split(sdr,2, dim=1)
+        
+        self.log('Train/mse_loss', loss)
+        self.log('Train/sdr', sdr.mean())
+        self.log('Train/sdr1', sdr1.mean())
+        self.log('Train/sdr2', sdr2.mean())
+        self.log('Train/sdr3', sdr3.mean())
+        self.log('Train/sdr4', sdr4.mean())
+        
         return loss
 
     def test_step(self, batch, batch_idx):
