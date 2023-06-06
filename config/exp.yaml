@@ -3,7 +3,7 @@ user_config: # path to config file to update
 devices: 1
 epochs: 1000
 sr: 16000
-data_root: '../dataset/mini_moise'
+data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo'
 model_name: 'Conv128'
 
 dataset:
@@ -23,3 +23,9 @@ trainer:
     devices: ${devices}
     max_epochs: ${epochs}
     check_val_every_n_epoch: 30
+    log_every_n_steps: 13
+    
+# Check https://hydra.cc/docs/tutorials/basic/running_your_app/working_directory/    
+hydra:
+    job:
+        chdir: True
