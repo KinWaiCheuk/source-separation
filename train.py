@@ -3,7 +3,7 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 import models as Model
-from AudioLoader.music.mss import Moisesdb23
+import AudioLoader.music.mss as Dataset
 import hydra
 from hydra.utils import to_absolute_path
 
@@ -13,10 +13,14 @@ import os
 @hydra.main(config_path="config", config_name="exp", version_base=None)
 def my_app(cfg):
     cfg.data_root = to_absolute_path(cfg.data_root)
-    trainset = Moisesdb23(**cfg.dataset.train)
-    valset = Moisesdb23(**cfg.dataset.train)
+    # trainset = Moisesdb23(**cfg.dataset.train)
+    # valset = Moisesdb23(**cfg.dataset.train)
+
+    trainset = getattr(Dataset, cfg.dataset.name)(**cfg.dataset.train)
+    valset = getattr(Dataset, cfg.dataset.name)(**cfg.dataset.val)
+    
     trainloader = torch.utils.data.DataLoader(trainset, **cfg.dataloader.train)
-    valloader = torch.utils.data.DataLoader(trainset, **cfg.dataloader.train)
+    valloader = torch.utils.data.DataLoader(trainset, **cfg.dataloader.train)    
 
     model = getattr(Model, cfg.model_name)()
 

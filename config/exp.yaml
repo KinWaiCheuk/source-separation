@@ -10,7 +10,7 @@ defaults:
         
 dataloader:
     train:
-        batch_size: 16
+        batch_size: 4
         num_workers: 8
         shuffle: True
         pin_memory: True

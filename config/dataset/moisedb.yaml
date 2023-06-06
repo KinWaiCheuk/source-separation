@@ -1,4 +1,11 @@
+name: 'Moisesdb23'
+
 train:
+    root: ${data_root} 
+    segment: 10
+    samplerate: ${sr}
+    
+val:
     root: ${data_root} 
     segment: 10
     samplerate: ${sr}
