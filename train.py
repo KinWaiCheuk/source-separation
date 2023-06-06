@@ -12,15 +12,17 @@ import os
 
 @hydra.main(config_path="config", config_name="exp", version_base=None)
 def my_app(cfg):
-    cfg.data_root = to_absolute_path(cfg.data_root)
+    cfg.dataset.data_root = to_absolute_path(cfg.dataset.data_root)
     # trainset = Moisesdb23(**cfg.dataset.train)
     # valset = Moisesdb23(**cfg.dataset.train)
 
     trainset = getattr(Dataset, cfg.dataset.name)(**cfg.dataset.train)
     valset = getattr(Dataset, cfg.dataset.name)(**cfg.dataset.val)
+    testset = getattr(Dataset, cfg.dataset.name)(**cfg.dataset.test)
     
     trainloader = torch.utils.data.DataLoader(trainset, **cfg.dataloader.train)
-    valloader = torch.utils.data.DataLoader(trainset, **cfg.dataloader.train)    
+    valloader = torch.utils.data.DataLoader(valset, **cfg.dataloader.val)
+    testloader = torch.utils.data.DataLoader(testset, **cfg.dataloader.test)
 
     model = getattr(Model, cfg.model_name)()
 
@@ -38,6 +40,7 @@ def my_app(cfg):
 
 
     trainer.fit(model, trainloader, valloader)
+    trainer.test(model, testloader)
     # check if bin 0-20 has changed
     
 if __name__ == "__main__":

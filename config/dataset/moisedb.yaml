@@ -1,11 +1,12 @@
 name: 'Moisesdb23'
+data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo'
 
 train:
-    root: ${data_root} 
-    segment: 10
+    root: ${dataset.data_root} 
+    segment: ${segment}
     samplerate: ${sr}
     
 val:
-    root: ${data_root} 
-    segment: 10
+    root: ${dataset.data_root} 
+    segment: ${segment}
     samplerate: ${sr}

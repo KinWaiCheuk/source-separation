@@ -32,8 +32,6 @@ class Conv128(pl.LightningModule):
         self.conv1d = nn.Conv1d(16, 8, 11, padding=5)
 
     def forward(self, x):
-        # x (batch , 1, 2, len)
-        x = x.flatten(1,2)
         
         x = self.conv1u(x)
         x = self.conv2u(x)
@@ -47,16 +45,32 @@ class Conv128(pl.LightningModule):
         
         return x # (batch, 8, len)
 
+    def step(self, batch):
+        # batch.shape = (B, 4, 2, L)
+        if self.training:
+            assert batch.dim() == 4 and batch.shape[1]==4,  \
+                f"Batch shape must be (B, 4, L), but got {batch.shape}"
+
+            mix = batch.sum(dim=1)  # (B, 2channel, L)
+            sources = batch
+        else:
+            mix = batch[:,0]
+            sources = batch[:,1:]
+            
+        pred = self(mix) # (batch, 8, len) 
+        
+        return pred, sources
 
     def training_step(self, batch, batch_idx):
-        pred = self(batch[0]) # (batch, 8, len)
-        label = batch[1] # (batch, 4, 2, len)
+        # batch.shape = (B, 4, 2, L)
+        pred, label = self.step(batch)
+        # label.shape = (batch, 4, 2, len)
         loss = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
         sdr = calculate_sdr(label.flatten(1,2), pred)
         sdr1, sdr2, sdr3, sdr4 = \
             torch.split(sdr,2, dim=1)
         
-        self.log('Train/mse_loss', loss)
+        self.log('Train/mse_wav', loss)
         self.log('Train/sdr', sdr.mean())
         self.log('Train/sdr1', sdr1.mean())
         self.log('Train/sdr2', sdr2.mean())
@@ -66,15 +80,15 @@ class Conv128(pl.LightningModule):
         return loss
 
     def test_step(self, batch, batch_idx):
-        pred = self(batch[0]) # (batch, 8, len)
-        label = batch[1] # (batch, 4, 2, len)
+        # batch.shape = (B, 4, 2, L)
+        pred, label = self.step(batch)
+        # label.shape = (batch, 4, 2, len)
         loss = torch.nn.functional.mse_loss(pred, label.flatten(1,2))
-
-        self.log('Test/mse_loss', loss)
-        
         sdr = calculate_sdr(label.flatten(1,2), pred)
         sdr1, sdr2, sdr3, sdr4 = \
             torch.split(sdr,2, dim=1)
+        
+        self.log('Test/mse_wav', loss)
         self.log('Test/sdr', sdr.mean())
         self.log('Test/sdr1', sdr1.mean())
         self.log('Test/sdr2', sdr2.mean())
@@ -86,4 +100,4 @@ class Conv128(pl.LightningModule):
 
     def configure_optimizers(self):
         r"""Configure optimizer."""
-        return optim.Adam(self.parameters())
+        return optim.Adam(self.parameters(), lr=1e-6)

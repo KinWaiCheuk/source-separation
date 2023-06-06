@@ -1,19 +1,32 @@
 devices: 1
 epochs: 1000
 sr: 16000
-data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo'
 model_name: 'Conv128'
+download: False
+segment: 10
 
-defaults:    
+defaults:  # TODO: make moisedb matches with musdb format
     - dataset: moisedb
 
         
 dataloader:
     train:
-        batch_size: 4
-        num_workers: 8
+        batch_size: 16
+        num_workers: 40
         shuffle: True
         pin_memory: True
+    val:
+        batch_size: 16
+        num_workers: 4
+        shuffle: False
+        pin_memory: True
+    test:
+        batch_size: 16
+        num_workers: 4
+        shuffle: False
+        pin_memory: True        
+
+        
 
 trainer:
     devices: ${devices}
