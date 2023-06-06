@@ -3,15 +3,12 @@ user_config: # path to config file to update
 devices: 1
 epochs: 1000
 sr: 16000
-data_root: '../dataset/mini_moise'
+data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo'
 model_name: 'Conv128'
 checkpoint_path: './outputs/2023-05-11/13-51-26/Conv128SuperRes/version_1/checkpoints/cfg.model_name-989.ckpt'
 
-dataset:
-    train:
-        root: ${data_root} 
-        segment: 10
-        samplerate: ${sr}
+defaults:    
+    - dataset: moisedb
         
 dataloader:
     train:

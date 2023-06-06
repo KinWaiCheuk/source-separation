@@ -1,0 +1,4 @@
+train:
+    root: ${data_root} 
+    segment: 10
+    samplerate: ${sr}
