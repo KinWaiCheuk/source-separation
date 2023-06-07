@@ -32,7 +32,7 @@ trainer:
     devices: ${devices}
     max_epochs: ${epochs}
     check_val_every_n_epoch: 30
-    log_every_n_steps: 13
+    log_every_n_steps: 100 
     
 # Check https://hydra.cc/docs/tutorials/basic/running_your_app/working_directory/    
 hydra:
