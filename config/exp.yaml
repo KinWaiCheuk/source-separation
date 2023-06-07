@@ -1,5 +1,5 @@
 devices: 1
-epochs: 1000
+epochs: 300
 sr: 16000
 download: False
 segment: 10

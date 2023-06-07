@@ -6,12 +6,14 @@ import models as Model
 import AudioLoader.music.mss as Dataset
 import hydra
 from hydra.utils import to_absolute_path
+from hydra.core.hydra_config import HydraConfig
 
 import os
 
 
 @hydra.main(config_path="config", config_name="exp", version_base=None)
 def my_app(cfg):
+    config_filename = HydraConfig.get().runtime.choices
     cfg.dataset.data_root = to_absolute_path(cfg.dataset.data_root)
     # trainset = Moisesdb23(**cfg.dataset.train)
     # valset = Moisesdb23(**cfg.dataset.train)
@@ -32,7 +34,7 @@ def my_app(cfg):
                                           mode="min",
                                           auto_insert_metric_name=False,
                                           save_last=True)
-    name = f"{cfg.model.name}-{cfg.sr}"
+    name = f"{cfg.model.name}-{config_filename.dataset}-{cfg.sr}"
     logger = TensorBoardLogger(save_dir=".", version=1, name=name)      
     trainer = pl.Trainer(**cfg.trainer,
                          callbacks=[checkpoint_callback,],
