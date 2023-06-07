@@ -1,12 +1,12 @@
 devices: 1
 epochs: 1000
 sr: 16000
-model_name: 'Conv128'
 download: False
 segment: 10
 
 defaults:  # TODO: make moisedb matches with musdb format
     - dataset: moisedb
+    - model: UNet
 
         
 dataloader:

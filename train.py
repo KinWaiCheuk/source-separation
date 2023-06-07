@@ -24,15 +24,15 @@ def my_app(cfg):
     valloader = torch.utils.data.DataLoader(valset, **cfg.dataloader.val)
     testloader = torch.utils.data.DataLoader(testset, **cfg.dataloader.test)
 
-    model = getattr(Model, cfg.model_name)()
+    model = getattr(Model, cfg.model.name)(**cfg.model.args)
 
     checkpoint_callback = ModelCheckpoint(monitor="Train/mse_wav",
-                                          filename=f"{cfg.model_name}-" + "{epoch:02d}",
+                                          filename=f"{cfg.model.name}-" + "{epoch:02d}",
                                           save_top_k=2,
                                           mode="min",
                                           auto_insert_metric_name=False,
                                           save_last=True)
-    name = f"{cfg.model_name}-{cfg.sr}"
+    name = f"{cfg.model.name}-{cfg.sr}"
     logger = TensorBoardLogger(save_dir=".", version=1, name=name)      
     trainer = pl.Trainer(**cfg.trainer,
                          callbacks=[checkpoint_callback,],
