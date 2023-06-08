@@ -1,11 +1,12 @@
 devices: 1
-epochs: 300
+epochs: 100 
 sr: 16000
 download: False
 segment: 10
+lr: 1e-6
 
 defaults:  # TODO: make moisedb matches with musdb format
-    - dataset: moisedb
+    - dataset: musdb
     - model: UNet
 
         

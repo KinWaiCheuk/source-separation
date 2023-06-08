@@ -26,7 +26,7 @@ def my_app(cfg):
     valloader = torch.utils.data.DataLoader(valset, **cfg.dataloader.val)
     testloader = torch.utils.data.DataLoader(testset, **cfg.dataloader.test)
 
-    model = getattr(Model, cfg.model.name)(**cfg.model.args)
+    model = getattr(Model, cfg.model.name)(**cfg.model.args, task_args=cfg.model.task)
 
     checkpoint_callback = ModelCheckpoint(monitor="Train/mse_wav",
                                           filename=f"{cfg.model.name}-" + "{epoch:02d}",
