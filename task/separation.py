@@ -85,10 +85,8 @@ class SeparationSpec(pl.LightningModule):
     # https://stackoverflow.com/questions/56746709/can-i-choose-the-parent-class-of-a-class-from-a-fixed-set-of-parent-classes-cond
     def __init__(self, **task_args):
         super().__init__()
-        print(task_args.values())
         self.save_hyperparameters()
         self.mel_layer = torchaudio.transforms.MelSpectrogram(**self.hparams.spec)
-        print(f"{self.hparams=}")
         
         
     def step(self, batch):

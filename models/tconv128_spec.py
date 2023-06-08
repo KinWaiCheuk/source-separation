@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import pytorch_lightning as pl
-import torch.optim as optim
 from task.separation import SeparationSpec
 
 class TConv128Spec(SeparationSpec):

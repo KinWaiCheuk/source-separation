@@ -27,6 +27,8 @@ def my_app(cfg):
     testloader = torch.utils.data.DataLoader(testset, **cfg.dataloader.test)
 
     model = getattr(Model, cfg.model.name)(**cfg.model.args, task_args=cfg.model.task)
+    if cfg.compile:
+        opt_model = torch.compile(model)
 
     checkpoint_callback = ModelCheckpoint(monitor="Train/mse_wav",
                                           filename=f"{cfg.model.name}-" + "{epoch:02d}",
@@ -41,9 +43,12 @@ def my_app(cfg):
                          logger=logger)
 
 
-    trainer.fit(model, trainloader, valloader)
-    trainer.test(model, testloader)
-    # check if bin 0-20 has changed
+    if cfg.compile:    
+        trainer.fit(opt_model, trainloader, valloader)
+        trainer.test(opt_model, testloader)
+    else:
+        trainer.fit(model, trainloader, valloader)
+        trainer.test(model, testloader)
     
 if __name__ == "__main__":
     my_app()

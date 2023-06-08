@@ -1,13 +1,12 @@
 import torch
 import torch.nn as nn
 import pytorch_lightning as pl
-import torch.optim as optim
-from task.separation import Separation
+from task.diff_separation import DiffSeparation
 
-class TConv128(Separation):
-    def __init__(self, input_channels, output_channels):
-        super().__init__()
-        
+
+class TConv128Diff(DiffSeparation):
+    def __init__(self, input_channels, output_channels, task_args):
+        super().__init__(**task_args)
         self.conv1u = nn.Conv1d(input_channels, 16, 11)
         self.conv2u = nn.Conv1d(16, 32, 9)
         self.conv3u = nn.Conv1d(32, 64, 7)
@@ -17,8 +16,13 @@ class TConv128(Separation):
         self.conv3d = nn.ConvTranspose1d(64, 32, 7)
         self.conv2d = nn.ConvTranspose1d(32, 16, 9)
         self.conv1d = nn.ConvTranspose1d(16, output_channels, 11)
+        
 
-    def forward(self, x):
+    def forward(self, x_t, waveform, t):
+        # x (batch , 1, 2, len) --> (batch, 10, len)   
+        x = torch.concat(
+            (waveform, x_t),
+            dim=1)
         
         x = self.conv1u(x)
         x = self.conv2u(x)
