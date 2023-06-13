@@ -1,4 +1,5 @@
 musdb==0.4.0
+tensorboard==2.13.0
 git+https://github.com/KinWaiCheuk/AudioLoader.git
 hydra-core==1.3.2
 lightning-utilities==0.8.0
