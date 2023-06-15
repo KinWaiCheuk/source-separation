@@ -4,6 +4,7 @@ import pytorch_lightning as pl
 import torch.optim as optim
 import torchaudio
 import torch.nn.functional as F
+import os
 
 def linear_beta_schedule(beta_start, beta_end, timesteps):
     return torch.linspace(beta_start, beta_end, timesteps)
@@ -200,6 +201,15 @@ class DiffSeparation(pl.LightningModule):
         # batch.shape = (B, 4, 2, L)
         diff_loss, pred_dict = self.step(batch) # (batch, 8, len)
         label = batch[0,1:] # (batch, 4, 2, len)
+        
+        if batch_idx==4:
+            torchaudio.save(os.path.join(os.getcwd(),f"mix.mp3"),
+                            batch[0,0].cpu(),
+                            16000) 
+            for idx, stem in enumerate(pred_dict['source_pred'][0].view(4,2,-1)):
+                torchaudio.save(os.path.join(os.getcwd(),f"stem{idx+1}.mp3"),
+                                stem.cpu(),
+                                16000)   
         
         loss_wav = torch.nn.functional.mse_loss(
             pred_dict['source_pred'],
