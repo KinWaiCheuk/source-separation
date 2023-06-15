@@ -18,9 +18,10 @@ def my_app(cfg):
 
     testloader = torch.utils.data.DataLoader(testset, **cfg.dataloader.test)
 
-    model = getattr(Model, cfg.model_name)()
+    model = getattr(Model, cfg.model.name).load_from_checkpoint(cfg.checkpoint_path)
 
-    name = f"Test-{cfg.model_name}-{cfg.sr}"
+
+    name = f"Test-{cfg.model.name}-{cfg.sr}"
     logger = TensorBoardLogger(save_dir=".", version=1, name=name)      
     trainer = pl.Trainer(**cfg.trainer,
                          logger=logger)

@@ -1,4 +1,4 @@
-data_root: '/root/dataset/mss/musdb18hq'
+data_root: '/workspace/public_data/MusicDataset/musdb18hq'
 name: "MusdbHQ"
 source: ['drums', 'bass', 'other', 'vocals']
 

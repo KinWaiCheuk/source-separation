@@ -1,12 +1,12 @@
+epochs: 1
 devices: 1
-epochs: 1000
 sr: 16000
-data_root: '/root/dataset/mss/moisesdb23_labelnoise_v1.0_16k_stereo'
-model_name: 'Conv128'
-checkpoint_path: './conv128_epoch696.ckpt'
+checkpoint_path: '/workspace/public_data/raven/source-separation/outputs/2023-06-09/12-15-13/TConv128Diff-musdb-16000/version_1/checkpoints/last.ckpt'
 
-defaults:    
+defaults:  # TODO: make moisedb matches with musdb format
     - dataset: musdb
+    - model: TConv128Diff
+
         
 dataloader:
     test:
