@@ -7,6 +7,8 @@ python test.py checkpoint_path='./diffusion.ckpt'
 
 # Training Models
 
+Training logs and checkpoints are saved inside `outputs`
+
 ## Diffusion model
 
 ```

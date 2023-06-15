@@ -87,7 +87,7 @@ class DecoderBlock(nn.Module):
 
 
 class UNet(Separation):
-    def __init__(self, channels_num):
+    def __init__(self, channels_num, task_args=None):
         super().__init__()
 
         momentum = 0.01   

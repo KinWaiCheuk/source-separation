@@ -5,7 +5,7 @@ import torch.optim as optim
 from task.separation import Separation
 
 class TConv128(Separation):
-    def __init__(self, input_channels, output_channels):
+    def __init__(self, input_channels, output_channels, task_args=None):
         super().__init__()
         
         self.conv1u = nn.Conv1d(input_channels, 16, 11)
