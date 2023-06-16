@@ -1,3 +1,7 @@
+# Installation
+
+`pip install -r requirements.txt`
+
 # Reproducing results
 
 ```
